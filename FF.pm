@@ -30,5 +30,10 @@ sub new_from_rational {
   return $class->new(@a);
 }
 
+sub expansion {
+  my ($self) = @_;
+  return @$self;
+}
+
 1;
 
