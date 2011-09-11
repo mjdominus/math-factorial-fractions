@@ -1,16 +1,26 @@
-#!perl
+#!/usr/bin/env perl
+# -*- cperl -*-
 
 use strict;
 use FF;
 
-for my $d (2..10) {
-  for my $n (1 .. $d-1) {
-    my $x = FF->new_from_rational($n, $d);
-    printf "%2d/%2d   0.%s\n", $n, $d, join("", @$x);
-  }
+if (@ARGV == 1) {
+  my @x = FF->new_from_real(@ARGV)->expansion;
+  print "0.", display_expansion(@x), "\n";
+}  elsif (@ARGV == 2) {
+  my @x = FF->new_from_rational(@ARGV)->expansion;
+  print "0.", display_expansion(@x), "\n";
+} else {
+  usage();
 }
 
-for (my $i = 2; $i < 1000000; $i *= 2) {
-    my $x = FF->new_from_rational(1, $i);
-    printf "%2d/%8d   0.%s    (%.40f)\n", 1, $i, join(" ", @$x), 1/$i;
+sub display_expansion {
+  my @x = @_;
+  my $j = (grep($_ > 9, @x) ? " " : "");
+  join $j, @x;
+}
+
+sub usage {
+  print STDERR "Usage:\tff 0.1435 # expand 0.1435\n\tff n d # expand rational n/d\n";
+  exit 1;
 }
